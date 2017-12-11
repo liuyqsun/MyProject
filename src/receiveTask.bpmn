@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:activiti="http://activiti.org/bpmn"
+			 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+			 xmlns:omgdi="http://www.w3.org/2001/XMLSchema"
+			 expressionLanguage="http://www.w3.org/1999/XPath"
+			 targetNamespace="http://www.yusys.com"
+>
+	<process id="SayToLeave" name="SayToLeaveName">
+		<extensionElements>
+			<activiti:eventListener class="com.yusys.ActivitiGlobalEventListener" />
+		</extensionElements>
+		<startEvent id="startevent1" name="Start"></startEvent>
+		<receiveTask id="waitState" name="wait" />
+		<exclusiveGateway id="gateway" name="gateway" />
+		<userTask id="usertask1" name="小领导审批" activiti:candidateGroups="leaders1">
+		</userTask>
+		<userTask id="usertask2" name="大领导审批" activiti:candidateGroups="leaders2">
+		</userTask>
+		<endEvent id="endevent1" name="End"></endEvent>
+		<sequenceFlow id="flow1" name="" sourceRef="startevent1" targetRef="waitState"></sequenceFlow>
+		<sequenceFlow id="flow2" name="" sourceRef="waitState" targetRef="gateway"></sequenceFlow>
+		<sequenceFlow id="flow3" name="" sourceRef="gateway" targetRef="usertask1">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${approved=='true'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow4" name="" sourceRef="gateway" targetRef="usertask2">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${approved=='false'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow5" name="" sourceRef="usertask1" targetRef="endevent1"></sequenceFlow>
+		<sequenceFlow id="flow6" name="" sourceRef="usertask2" targetRef="endevent1"></sequenceFlow>
+	</process>
+</definitions>
